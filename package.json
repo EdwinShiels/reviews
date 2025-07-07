@@ -7,17 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate:pages": "ts-node --loader ts-node/esm scripts/generatePages.ts"
+    "generate:pages": "ts-node scripts/generatePages.ts"
   },
   "dependencies": {
+    "next": "15.3.5",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.5"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   }
 }
