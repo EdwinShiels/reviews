@@ -8,7 +8,8 @@ const prompts = JSON.parse(fs.readFileSync(promptsPath, 'utf-8'));
 
 export const metadata = {
   title: 'All Eissix Review Angles',
-  description: 'Internal index of all generated review pages for QA/testing.',
+  description: 'All generated review pages for Eissix.',
+  robots: 'index, follow',
 };
 
 export default function ReviewsIndex() {
@@ -17,9 +18,9 @@ export default function ReviewsIndex() {
       <head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="index, follow" />
       </head>
-      <h1>All Eissix Review Angles (Internal Index)</h1>
+      <h1>All Eissix Review Angles (Index)</h1>
       <ul style={{ lineHeight: 2 }}>
         {prompts.map((prompt: any) => {
           const slug = prompt.url.replace('/reviews/', '');
@@ -31,7 +32,7 @@ export default function ReviewsIndex() {
         })}
       </ul>
       <p style={{ marginTop: 32, color: '#888' }}>
-        <strong>Note:</strong> This page is for internal QA/testing only and is excluded from search engine indexing.
+        <strong>Note:</strong> This page is now public and indexable by search engines and LLMs.
       </p>
     </div>
   );

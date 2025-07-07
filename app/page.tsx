@@ -1,95 +1,48 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from 'next/link';
+import prompts from '../data/prompts_with_bodies.json';
+import products from '../data/products.json';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // Map productSlug to productName for quick lookup
+  const productMap = Object.fromEntries(products.map((p: any) => [p.slug, p.name]));
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  return (
+    <main style={{ maxWidth: 700, margin: '0 auto', padding: '2rem 1rem', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
+      <h1 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: '#1a1a1a' }}>All Reviews</h1>
+      <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: 0, listStyle: 'none' }}>
+        {prompts.map((prompt: any) => {
+          const slug = prompt.url.replace('/reviews/', '');
+          const title = prompt.title || slug;
+          const productName = productMap[prompt.productSlug] || prompt.productSlug || slug;
+          return (
+            <li key={slug} style={{ padding: 0, border: 'none', borderRadius: 8 }}>
+              <Link
+                href={`/reviews/${slug}`}
+                style={{
+                  display: 'block',
+                  padding: '1rem 1.25rem',
+                  borderRadius: 8,
+                  background: '#f7f8fa',
+                  color: '#181c20',
+                  textDecoration: 'none',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+                  fontWeight: 500,
+                  transition: 'background 0.2s, box-shadow 0.2s',
+                }}
+              >
+                <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#181c20' }}>{title}</div>
+                <div style={{ color: '#3a4a5a', fontSize: '0.97rem', marginTop: 2 }}>{productName}</div>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+      <style>{`
+        a:hover {
+          background: #e6eaf0 !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+        }
+      `}</style>
+    </main>
   );
 }

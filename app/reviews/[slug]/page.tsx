@@ -2,6 +2,8 @@ import ReviewPage from './ReviewPage';
 import products from '../../../data/products.json';
 import prompts from '../../../data/prompts_with_bodies.json';
 import { Metadata, ResolvingMetadata } from 'next';
+import StructuredData from '../../../components/StructuredData';
+import React from 'react';
 
 function getReviewData(slug: string) {
   const prompt = prompts.find((p: any) => {
@@ -42,8 +44,17 @@ export async function generateMetadata(
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const review = getReviewData(slug);
-  if (!review) return <div>Review not found</div>;
-  return <ReviewPage {...review} />;
+  if (!review) throw new Error(`Review data missing for slug: ${slug}`);
+  const { productName, metaDescription, body } = review;
+  if (!productName || !metaDescription || !body) {
+    throw new Error(`Missing required review data for slug: ${slug} (productName: ${productName}, metaDescription: ${metaDescription}, body: ${body})`);
+  }
+  // Log for debugging SSR/SSG
+  console.log('StructuredData SSR props:', { productName, metaDescription, body });
+  return <>
+    <StructuredData productName={productName} metaDescription={metaDescription} body={body} />
+    <ReviewPage {...review} />
+  </>;
 }
 
 export async function generateStaticParams() {
