@@ -27,10 +27,11 @@ function getReviewData(slug: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } },
+  { params }: { params: Promise<{ slug: string }> },
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const review = getReviewData(params.slug);
+  const { slug } = await params;
+  const review = getReviewData(slug);
   return {
     title: review?.title || 'Review',
     description: review?.metaDescription || '',
@@ -38,8 +39,9 @@ export async function generateMetadata(
   };
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const review = getReviewData(params.slug);
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const review = getReviewData(slug);
   if (!review) return <div>Review not found</div>;
   return <ReviewPage {...review} />;
 }
